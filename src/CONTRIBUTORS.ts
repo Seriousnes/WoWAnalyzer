@@ -2570,3 +2570,8 @@ export const Nevdok: Contributor = {
   nickname: 'Nevdok',
   github: 'GeoffreyBalshaw',
 };
+export const Faultygaming: Contributor = {
+  nickname: 'Faulty',
+  github: 'Faultygaming',
+  discord: 'faultygaming',
+};
