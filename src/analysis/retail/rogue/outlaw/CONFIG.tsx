@@ -32,7 +32,7 @@ const config: Config = {
   ),
   // A recent example report to see interesting parts of the spec. Will be shown on the homepage.
   exampleReport:
-    '/report/t27zV8NLgPvJq3Kk/17-Mythic+Terros+-+Kill+(5:47)/Zirëael/standard/overview',
+    '/report/VD9BxCQ8mwpaycMP/4-Normal+Queen+Ansurek+-+Kill+(6:16)/Shadowbladëz/standard/overview',
   // Don't change anything below this line;
   // The current spec identifier. This is the only place (in code) that specifies which spec this parser is about.
   spec: SPECS.OUTLAW_ROGUE,
