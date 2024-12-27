@@ -22,6 +22,7 @@ import Volcanism from './modules/talents/Volcanism';
 import BlisteringScales from './modules/talents/BlisteringScales';
 import MoltenEmbers from './modules/talents/MoltenEmbers';
 import RumblingEarth from './modules/talents/RumblingEarth';
+import MomentumShift from './modules/talents/MomentumShift';
 
 import BuffTrackerGraph from './modules/features/BuffTrackerGraph';
 import BuffTargetHelper from './modules/features/BuffTargetHelper/BuffTargetHelper';
@@ -34,6 +35,7 @@ import EbonMightNormalizer from './modules/normalizers/EbonMightNormalizer';
 
 // Tier
 import T31Augmentation4P from './modules/dragonflight/T31Augmentation4P';
+import T32Augmentation2P from './modules/thewarwithin/T32Augmentation2P';
 
 //Shared
 import {
@@ -68,6 +70,7 @@ import {
   Chronoflame,
   ThreadsOfFate,
   Reverberations,
+  Primacy,
 } from 'analysis/retail/evoker/shared';
 
 class CombatLogParser extends MainCombatLogParser {
@@ -128,6 +131,7 @@ class CombatLogParser extends MainCombatLogParser {
     blisteringScales: BlisteringScales,
     moltenEmbers: MoltenEmbers,
     rumblingEarth: RumblingEarth,
+    momentumShift: MomentumShift,
 
     // hero talents
     mightOfTheBlackDragonflight: MightOfTheBlackDragonflight,
@@ -140,6 +144,7 @@ class CombatLogParser extends MainCombatLogParser {
     chronoflame: Chronoflame,
     threadsOfFate: ThreadsOfFate,
     reverberations: Reverberations,
+    primacy: Primacy,
 
     // Features
     buffTrackerGraph: BuffTrackerGraph,
@@ -147,6 +152,7 @@ class CombatLogParser extends MainCombatLogParser {
 
     // Tier
     t31Augmentation4P: T31Augmentation4P,
+    t32Augmentation2P: T32Augmentation2P,
   };
   static guide = Guide;
 }
