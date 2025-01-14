@@ -38,6 +38,7 @@ const ArmsWarriorChecklist = ({
           TALENTS.AVATAR_SHARED_TALENT,
           TALENTS.THUNDEROUS_ROAR_TALENT,
           SPELLS.BLADESTORM,
+          SPELLS.DEMOLISH,
         ]}
         description={
           <div style={{ color: 'white' }}>

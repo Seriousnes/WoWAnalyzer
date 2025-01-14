@@ -321,6 +321,11 @@ const spells = {
     name: 'Bladestorm',
     icon: 'ability_warrior_bladestorm',
   },
+  COLOSSAL_MIGHT: {
+    id: 440989,
+    name: 'Colossal Might',
+    icon: 'ability_warrior_strengthofarms',
+  },
   COLOSSUS_SMASH: {
     id: 167105,
     name: 'Colossus Smash',
@@ -330,6 +335,16 @@ const spells = {
     id: 208086,
     name: 'Colossus Smash',
     icon: 'ability_warrior_colossussmash',
+  },
+  DEMOLISH: {
+    id: 436358,
+    name: 'Demolish',
+    icon: 'inv_ability_colossuswarrior_demolish',
+  },
+  DEMOLISH_DAMAGE: {
+    id: 440884,
+    name: 'Demolish',
+    icon: 'inv_ability_colossuswarrior_demolish',
   },
   DIE_BY_THE_SWORD: {
     id: 118038,
