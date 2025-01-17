@@ -54,7 +54,12 @@ const MASS_ERUPTION_DAMAGE_BUFFER = 1000; // These have very spooky delay
 export const UPHEAVAL_REVERBERATION_DAM_LINK = 'upheavalReverberationDamLink';
 export const UPHEAVAL_REVERBERATION_BUFFER = 12_000; // This DoT last a very long while
 
-export const VOLCANIC_UPSURGE_CONSUME = 'volcanicUpsurgeConsume';
+const VOLCANIC_UPSURGE_CONSUME = 'volcanicUpsurgeConsume';
+
+const GOLDEN_OPPORTUNITY_CONSUME = 'goldenOpportunityConsume';
+
+const ERUPTION_ESSENCE_BURST_CONSUME = 'eruptionEssenceBurstConsume';
+const DREAM_ESSENCE_BURST_CONSUME = 'dreamEssenceBurstConsume';
 
 const PRESCIENCE_BUFFER = 150;
 const CAST_BUFFER_MS = 100;
@@ -336,6 +341,43 @@ const EVENT_LINKS: EventLink[] = [
     isActive: (C) => C.has4PieceByTier(TIERS.TWW1),
     maximumLinks: 1,
   },
+  {
+    linkRelation: GOLDEN_OPPORTUNITY_CONSUME,
+    reverseLinkRelation: GOLDEN_OPPORTUNITY_CONSUME,
+    linkingEventId: SPELLS.PRESCIENCE_BUFF.id,
+    linkingEventType: [EventType.ApplyBuff, EventType.RefreshBuff],
+    referencedEventId: SPELLS.GOLDEN_OPPORTUNITY_BUFF.id,
+    referencedEventType: EventType.RemoveBuff,
+    anyTarget: true,
+    // Same buffer as Prescience casts
+    forwardBufferMs: PRESCIENCE_BUFFER,
+    backwardBufferMs: PRESCIENCE_BUFFER,
+  },
+  {
+    linkRelation: ERUPTION_ESSENCE_BURST_CONSUME,
+    reverseLinkRelation: ERUPTION_ESSENCE_BURST_CONSUME,
+    linkingEventId: TALENTS.ERUPTION_TALENT.id,
+    linkingEventType: EventType.Cast,
+    referencedEventId: SPELLS.ESSENCE_BURST_AUGMENTATION_BUFF.id,
+    referencedEventType: [EventType.RemoveBuff, EventType.RemoveBuffStack],
+    anyTarget: true,
+    forwardBufferMs: CAST_BUFFER_MS,
+    backwardBufferMs: CAST_BUFFER_MS,
+    maximumLinks: 1,
+  },
+  {
+    linkRelation: DREAM_ESSENCE_BURST_CONSUME,
+    reverseLinkRelation: DREAM_ESSENCE_BURST_CONSUME,
+    linkingEventId: SPELLS.EMERALD_BLOSSOM.id,
+    linkingEventType: EventType.Cast,
+    referencedEventId: SPELLS.ESSENCE_BURST_AUGMENTATION_BUFF.id,
+    referencedEventType: [EventType.RemoveBuff, EventType.RemoveBuffStack],
+    anyTarget: true,
+    forwardBufferMs: CAST_BUFFER_MS,
+    backwardBufferMs: CAST_BUFFER_MS,
+    isActive: (C) => C.hasTalent(TALENTS.DREAM_OF_SPRING_TALENT),
+    maximumLinks: 1,
+  },
 ];
 
 class CastLinkNormalizer extends EventLinkNormalizer {
@@ -440,6 +482,22 @@ export function getMassEruptionDamageEvents(event: CastEvent): DamageEvent[] {
 
 export function isVolcanicUpsurgeEruption(event: CastEvent) {
   return HasRelatedEvent(event, VOLCANIC_UPSURGE_CONSUME);
+}
+
+export function isGoldenOpportunityPrescience(event: ApplyBuffEvent | RefreshBuffEvent) {
+  return HasRelatedEvent(event, GOLDEN_OPPORTUNITY_CONSUME);
+}
+
+export function eruptionConsumedEssenceBurst(event: CastEvent) {
+  return HasRelatedEvent(event, ERUPTION_ESSENCE_BURST_CONSUME);
+}
+
+export function dreamConsumedEssenceBurst(event: CastEvent) {
+  return HasRelatedEvent(event, DREAM_ESSENCE_BURST_CONSUME);
+}
+
+export function hasEruptionCastLink(event: DamageEvent) {
+  return HasRelatedEvent(event, ERUPTION_CAST_DAM_LINK);
 }
 
 export default CastLinkNormalizer;

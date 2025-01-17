@@ -598,20 +598,30 @@ const spells = {
     name: 'Chronoflame',
     icon: 'inv_ability_chronowardenevoker_chronoflame',
   },
-  THREADS_OF_FATE_HEALING: {
-    id: 432896,
-    name: 'Threads of Fate',
+  THREAD_OF_FATE_BUFF: {
+    id: 431716,
+    name: 'Thread of Fate',
     icon: 'ability_evoker_sandsoftime',
   },
-  THREADS_OF_FATE_DAMAGE: {
+  THREAD_OF_FATE_HEALING: {
+    id: 432896,
+    name: 'Thread of Fate',
+    icon: 'ability_evoker_sandsoftime',
+  },
+  THREAD_OF_FATE_DAMAGE: {
     id: 432895,
-    name: 'Threads of Fate',
+    name: 'Thread of Fate',
     icon: 'ability_evoker_sandsoftime',
   },
   PRIMACY_BUFF: {
     id: 431654,
     name: 'Primacy',
     icon: 'Inv_misc_pocketwatch_01',
+  },
+  TIME_CONVERGENCE_BUFF: {
+    id: 431991,
+    name: 'Time Convergence',
+    icon: 'ability_evoker_plotthefuture',
   },
   IMMINENT_DESTRUCTION_DEV_BUFF: {
     id: 411055,
@@ -653,6 +663,81 @@ const spells = {
     id: 456142,
     name: 'Volcanic Upsurge',
     icon: 'ability_evoker_earthensky',
+  },
+  GOLDEN_OPPORTUNITY_BUFF: {
+    id: 459878,
+    name: 'Golden Opportunity',
+    icon: 'achievement_faction_goldenlotus',
+  },
+  MOTES_OF_ACCELERATION_BUFF: {
+    id: 432061,
+    name: 'Motes of Acceleration',
+    icon: 'item_timemote_icon',
+  },
+  TIME_SPIRAL_DEATH_KNIGHT_BUFF: {
+    id: 375226,
+    name: 'Time Spiral',
+    icon: 'ability_evoker_timespiral',
+  },
+  TIME_SPIRAL_DEMON_HUNTER_BUFF: {
+    id: 375229,
+    name: 'Time Spiral',
+    icon: 'ability_evoker_timespiral',
+  },
+  TIME_SPIRAL_DRUID_BUFF: {
+    id: 375230,
+    name: 'Time Spiral',
+    icon: 'ability_evoker_timespiral',
+  },
+  TIME_SPIRAL_EVOKER_BUFF: {
+    id: 375234,
+    name: 'Time Spiral',
+    icon: 'ability_evoker_timespiral',
+  },
+  TIME_SPIRAL_HUNTER_BUFF: {
+    id: 375238,
+    name: 'Time Spiral',
+    icon: 'ability_evoker_timespiral',
+  },
+  TIME_SPIRAL_MAGE_BUFF: {
+    id: 375240,
+    name: 'Time Spiral',
+    icon: 'ability_evoker_timespiral',
+  },
+  TIME_SPIRAL_MONK_BUFF: {
+    id: 375252,
+    name: 'Time Spiral',
+    icon: 'ability_evoker_timespiral',
+  },
+  TIME_SPIRAL_PALADIN_BUFF: {
+    id: 375253,
+    name: 'Time Spiral',
+    icon: 'ability_evoker_timespiral',
+  },
+  TIME_SPIRAL_PRIEST_BUFF: {
+    id: 375254,
+    name: 'Time Spiral',
+    icon: 'ability_evoker_timespiral',
+  },
+  TIME_SPIRAL_ROGUE_BUFF: {
+    id: 375255,
+    name: 'Time Spiral',
+    icon: 'ability_evoker_timespiral',
+  },
+  TIME_SPIRAL_SHAMAN_BUFF: {
+    id: 375256,
+    name: 'Time Spiral',
+    icon: 'ability_evoker_timespiral',
+  },
+  TIME_SPIRAL_WARLOCK_BUFF: {
+    id: 375257,
+    name: 'Time Spiral',
+    icon: 'ability_evoker_timespiral',
+  },
+  TIME_SPIRAL_WARRIOR_BUFF: {
+    id: 375258,
+    name: 'Time Spiral',
+    icon: 'ability_evoker_timespiral',
   },
   // endregion
 } satisfies Record<string, Spell>;

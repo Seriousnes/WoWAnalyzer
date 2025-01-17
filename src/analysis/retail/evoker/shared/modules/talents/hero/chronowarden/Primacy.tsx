@@ -36,7 +36,7 @@ class Primacy extends Analyzer {
         <TalentSpellText talent={TALENTS_EVOKER.PRIMACY_TALENT}>
           <div>
             <HasteIcon /> {hasteBuffPercentage.toFixed(2)}%<small> average Haste gained</small>
-            <p></p>
+            <br />
             <InformationIcon /> {formatPercentage(buffUptime, 2)}%<small> buff uptime</small>
           </div>
         </TalentSpellText>
