@@ -6,6 +6,7 @@ export const ACCRETION_CDR_MS = 1000;
 
 // Ebon Might
 export const EBON_MIGHT_BASE_DURATION_MS = 10000;
+export const EBON_MIGHT_PERSONAL_DAMAGE_AMP = 0.2;
 
 // Mastery Versatility buff
 export const SHIFTING_SANDS_MASTERY_COEFFICIENT = 0.34;
@@ -19,6 +20,11 @@ export const EMPOWER_EXTENSION_MS = 2000;
 export const BREATH_OF_EONS_EXTENSION_MS = 5000;
 export const DREAM_OF_SPRINGS_EXTENSION_MS = 1000;
 export const SANDS_OF_TIME_CRIT_MOD = 0.5;
+
+//Close as Clutchmates
+export const CLOSE_AS_CLUTCHMATES_MOD = 1.0;
+//Change to below on 11.1 release
+//export const CLOSE_AS_CLUTCHMATES_MOD = 1.25;
 
 // Prescience
 export const PRESCIENCE_BASE_DURATION_MS = 18000;

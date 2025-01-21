@@ -159,7 +159,7 @@ class TimeSpiral extends Analyzer {
             <br />
             <InformationIcon /> {this.externalBuffsUsed}
             <small> external buffs used</small>
-            {personalBuffsWasted > 0 && (
+            {externalBuffsWasted > 0 && (
               <>
                 <br />
                 <WarningIcon /> {externalBuffsWasted}

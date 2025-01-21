@@ -198,9 +198,9 @@ const EVENT_LINKS: EventLink[] = [
   {
     linkRelation: PUPIL_OF_ALEXSTRASZA_LINK,
     reverseLinkRelation: PUPIL_OF_ALEXSTRASZA_LINK,
-    linkingEventId: SPELLS.LIVING_FLAME_CAST.id,
+    linkingEventId: [SPELLS.LIVING_FLAME_CAST.id, SPELLS.CHRONO_FLAME_CAST.id],
     linkingEventType: EventType.Cast,
-    referencedEventId: SPELLS.LIVING_FLAME_DAMAGE.id,
+    referencedEventId: [SPELLS.LIVING_FLAME_DAMAGE.id, SPELLS.CHRONO_FLAME_DAMAGE.id],
     referencedEventType: EventType.Damage,
     anyTarget: true,
     maximumLinks: 1,
