@@ -1,15 +1,18 @@
-import { formatPercentage } from 'common/format';
 import TALENTS from 'common/TALENTS/shaman';
-import { SpellLink } from 'interface';
 import Analyzer, { Options, SELECTED_PLAYER } from 'parser/core/Analyzer';
-import { calculateEffectiveHealing } from 'parser/core/EventCalculateLib';
+import { calculateEffectiveHealing, calculateOverhealing } from 'parser/core/EventCalculateLib';
 import Events, { HealEvent } from 'parser/core/Events';
-import StatisticListBoxItem from 'parser/ui/StatisticListBoxItem';
+import Statistic from 'parser/ui/Statistic';
+import STATISTIC_CATEGORY from 'parser/ui/STATISTIC_CATEGORY';
+import TalentSpellText from 'parser/ui/TalentSpellText';
+import ItemHealingDone from 'parser/ui/ItemHealingDone';
+import { formatNumber } from 'common/format';
 
 const TORRENT_HEALING_INCREASE = 0.1;
 
 class Torrent extends Analyzer {
   healing = 0;
+  overHealing = 0;
   torrentIncrease = 0;
   constructor(options: Options) {
     super(options);
@@ -28,14 +31,27 @@ class Torrent extends Analyzer {
     }
 
     this.healing += calculateEffectiveHealing(event, this.torrentIncrease);
+    this.overHealing += calculateOverhealing(event, this.torrentIncrease);
   }
 
-  subStatistic() {
+  statistic() {
     return (
-      <StatisticListBoxItem
-        title={<SpellLink spell={TALENTS.TORRENT_TALENT} />}
-        value={`${formatPercentage(this.owner.getPercentageOfTotalHealingDone(this.healing))} %`}
-      />
+      <Statistic
+        size="flexible"
+        category={STATISTIC_CATEGORY.TALENTS}
+        tooltip={
+          <>
+            <strong>{formatNumber(this.healing)}</strong> bonus healing (
+            {formatNumber(this.overHealing)} overhealing)
+          </>
+        }
+      >
+        <TalentSpellText talent={TALENTS.TORRENT_TALENT}>
+          <div>
+            <ItemHealingDone amount={this.healing} />{' '}
+          </div>
+        </TalentSpellText>
+      </Statistic>
     );
   }
 }
