@@ -3,9 +3,6 @@ import TALENTS from 'common/TALENTS/shaman';
 
 //event link attribution strings
 export const HARDCAST = 'Hardcast';
-export const RIPTIDE_PWAVE = 'PrimordialWave';
-export const PWAVE_REMOVAL = 'PrimordialWaveRemoved';
-export const HEALING_WAVE_PWAVE = 'HealingWavePrimordialWave';
 export const PRIMAL_TIDE_CORE = 'PrimalTideCore';
 export const APPLIED_HEAL = 'AppliedHeal';
 export const UNLEASH_LIFE = 'UnleashLife';
@@ -27,7 +24,6 @@ export const CAST_BUFFER_MS = 100;
 // had no issues with 85ms
 export const SURGING_TOTEM_BUFFER_MS = 85;
 
-export const PWAVE_TRAVEL_MS = 1100;
 export const UNLEASH_LIFE_REMOVE_MS = 400;
 //healing increases
 export const UNLEASH_LIFE_HEALING_INCREASE = 0.35;
@@ -64,7 +60,6 @@ export const RESTORATION_COLORS = {
   UNLEASH_LIFE: '#1ba691',
   WELLSPRING: '#515c61',
   DOWNPOUR: '#3b6760',
-  PRIMORDIAL_WAVE: '#0d2b36',
   UNUSED: '#CC3D20',
 };
 
@@ -77,8 +72,7 @@ export const HIGH_TIDE_COEFFICIENT = 2.541;
 // TODO: Create list for Ancestral Guidance (should be all BASE + Ascendance + CBT)
 const SHAMAN_BASE_ABILITIES = [
   SPELLS.HEALING_SURGE,
-  SPELLS.PRIMORDIAL_WAVE_HEAL,
-  TALENTS.HEALING_WAVE_TALENT,
+  SPELLS.HEALING_WAVE,
   TALENTS.CHAIN_HEAL_TALENT,
   SPELLS.HEALING_SURGE,
   TALENTS.RIPTIDE_TALENT,

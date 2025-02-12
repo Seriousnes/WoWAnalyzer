@@ -18,10 +18,10 @@ import './ManaTideTotem.scss';
 
 // Base Mana Regen per second is 20,000(100,000 MP5)
 export const MANA_REGEN_PER_SECOND = 100_000 / 5;
-// Mana Tide Totem buffs mana regen by 80% for 8 seconds
+// Mana Tide buffs mana regen by 80% for 8 seconds
 const BUFFED_MANA_REGEN_PER_SECOND = 36_000;
 
-class ManaTideTotem extends Analyzer {
+class ManaTide extends Analyzer {
   static dependencies = {
     combatants: Combatants,
   };
@@ -32,20 +32,20 @@ class ManaTideTotem extends Analyzer {
 
   constructor(options: Options) {
     super(options);
-    this.active = this.selectedCombatant.hasTalent(TALENTS.MANA_TIDE_TOTEM_TALENT);
+    this.active = this.selectedCombatant.hasTalent(TALENTS.MANA_TIDE_TALENT);
 
     this.addEventListener(
-      Events.summon.by(SELECTED_PLAYER).spell(TALENTS.MANA_TIDE_TOTEM_TALENT),
-      this.manaTideTotem,
+      Events.summon.by(SELECTED_PLAYER).spell(TALENTS.HEALING_TIDE_TOTEM_TALENT),
+      this.manaTide,
     );
   }
 
-  manaTideTotem(event: SummonEvent) {
+  manaTide(event: SummonEvent) {
     this.sourceID = event.targetID;
   }
 
   get regenOnPlayer() {
-    return this.selectedCombatant.getBuffUptime(SPELLS.MANA_TIDE_TOTEM_BUFF.id, this.sourceID);
+    return this.selectedCombatant.getBuffUptime(SPELLS.MANA_TIDE_BUFF.id, this.sourceID);
   }
   get regenOnHealers() {
     return Object.values(this.regenPerHealer).reduce((uptime, player) => uptime + player.uptime, 0);
@@ -58,7 +58,7 @@ class ManaTideTotem extends Analyzer {
         .map((player) => ({
           [player.id]: {
             healer: player,
-            uptime: player.getBuffUptime(SPELLS.MANA_TIDE_TOTEM_BUFF.id, this.sourceID),
+            uptime: player.getBuffUptime(SPELLS.MANA_TIDE_BUFF.id, this.sourceID),
           },
         })),
     );
@@ -103,7 +103,7 @@ class ManaTideTotem extends Analyzer {
           </table>
         }
       >
-        <TalentSpellText talent={TALENTS.MANA_TIDE_TOTEM_TALENT}>
+        <TalentSpellText talent={TALENTS.MANA_TIDE_TALENT}>
           <ItemManaGained
             amount={this.regenFromUptime(this.regenOnPlayer)}
             useAbbrev
@@ -117,4 +117,4 @@ class ManaTideTotem extends Analyzer {
   }
 }
 
-export default ManaTideTotem;
+export default ManaTide;

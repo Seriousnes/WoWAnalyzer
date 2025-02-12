@@ -116,14 +116,14 @@ class LegacyOfTheFrostWitch extends Analyzer {
     if (event.type === EventType.ApplyBuff) {
       this.lastApply = event.timestamp;
     }
-    if (this.spellUsable.isOnCooldown(TALENTS.STORMSTRIKE_TALENT.id)) {
+    if (this.spellUsable.isOnCooldown(SPELLS.STORMSTRIKE_CAST.id)) {
       debug &&
         console.log(
           `Stormstrike reset by Legacy of the Frost Witch at timestamp: ${
             event.timestamp
           } (${this.owner.formatTimestamp(event.timestamp, 3)})`,
         );
-      this.spellUsable.endCooldown(TALENTS.STORMSTRIKE_TALENT.id, event.timestamp);
+      this.spellUsable.endCooldown(SPELLS.STORMSTRIKE_CAST.id, event.timestamp);
       if (!this.selectedCombatant.hasBuff(TALENTS.ASCENDANCE_ENHANCEMENT_TALENT.id)) {
         this.stormStrikeResets += 1;
       }
@@ -183,7 +183,7 @@ class LegacyOfTheFrostWitch extends Analyzer {
             <ul>
               <li>
                 <strong>{this.stormStrikeResets}</strong>{' '}
-                <SpellLink spell={TALENTS.STORMSTRIKE_TALENT} /> resets
+                <SpellLink spell={SPELLS.STORMSTRIKE_CAST} /> resets
               </li>
               <li>
                 <strong>{this.windStrikeResets}</strong>{' '}

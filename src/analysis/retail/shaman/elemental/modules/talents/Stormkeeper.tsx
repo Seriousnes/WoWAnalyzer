@@ -340,7 +340,7 @@ class Stormkeeper extends MajorCooldown<StormkeeperCast> {
         addEnhancedCastReason(
           event,
           <>
-            Consuming <SpellLink spell={TALENTS.PRIMORDIAL_WAVE_SPEC_TALENT} />
+            Consuming <SpellLink spell={TALENTS.PRIMORDIAL_WAVE_TALENT} />
           </>,
         );
       } else {
@@ -349,7 +349,7 @@ class Stormkeeper extends MajorCooldown<StormkeeperCast> {
             event,
             <>
               <SpellLink spell={TALENTS.LAVA_BURST_TALENT} /> should only be cast to consume{' '}
-              <SpellLink spell={TALENTS.PRIMORDIAL_WAVE_SPEC_TALENT} />
+              <SpellLink spell={TALENTS.PRIMORDIAL_WAVE_TALENT} />
             </>,
           );
       }

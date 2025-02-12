@@ -70,7 +70,7 @@ const tempestDamageLink: EventLink = {
 };
 const primordialWaveLink: EventLink = {
   linkRelation: PRIMORDIAL_WAVE_LINK,
-  linkingEventId: TALENTS.PRIMORDIAL_WAVE_SPEC_TALENT.id,
+  linkingEventId: TALENTS.PRIMORDIAL_WAVE_TALENT.id,
   linkingEventType: EventType.Cast,
   referencedEventId: SPELLS.LIGHTNING_BOLT.id,
   referencedEventType: EventType.Cast,
@@ -78,7 +78,7 @@ const primordialWaveLink: EventLink = {
   forwardBufferMs: EventLinkBuffers.PrimordialWave,
   maximumLinks: 1,
   reverseLinkRelation: PRIMORDIAL_WAVE_LINK,
-  isActive: (c) => c.hasTalent(TALENTS.PRIMORDIAL_WAVE_SPEC_TALENT),
+  isActive: (c) => c.hasTalent(TALENTS.PRIMORDIAL_WAVE_TALENT),
 };
 const splinteredElements: EventLink = {
   linkRelation: SPLINTERED_ELEMENTS_LINK,

@@ -6,7 +6,6 @@ import CoreHealingEfficiencyTracker, {
 } from 'parser/core/healingEfficiency/HealingEfficiencyTracker';
 
 import CooldownThroughputTracker from '../features/CooldownThroughputTracker';
-import PrimordialWave from '../talents/PrimordialWave';
 import Resurgence from '../spells/Resurgence';
 import UnleashLife from '../talents/UnleashLife';
 import HealingDone from './HealingDone';
@@ -23,7 +22,6 @@ class HealingEfficiencyTracker extends CoreHealingEfficiencyTracker {
     cooldownThroughputTracker: CooldownThroughputTracker,
     unleashLife: UnleashLife,
     earthShield: EarthShield,
-    primordialWave: PrimordialWave,
     downpour: Downpour,
     surgingTotem: SurgingTotem,
   };
@@ -34,7 +32,6 @@ class HealingEfficiencyTracker extends CoreHealingEfficiencyTracker {
   protected cooldownThroughputTracker!: CooldownThroughputTracker;
   protected unleashLife!: UnleashLife;
   protected earthShield!: EarthShield;
-  protected primordialWave!: PrimordialWave;
   protected downpour!: Downpour;
   protected surgingTotem!: SurgingTotem;
 
@@ -51,15 +48,6 @@ class HealingEfficiencyTracker extends CoreHealingEfficiencyTracker {
     } else if (spellId === TALENTS.LAVA_BURST_TALENT.id) {
       this.getLavaBurstDamageDetails(spellInfo);
     }
-    // Primordial
-    if (spellId === TALENTS.HEALING_WAVE_TALENT.id) {
-      this.getHealingWaveDetails(spellInfo);
-    } else if (spellId === TALENTS.RIPTIDE_TALENT.id) {
-      this.getRiptideDetails(spellInfo);
-    } else if (spellId === TALENTS.PRIMORDIAL_WAVE_RESTORATION_TALENT.id) {
-      this.getPrimordialWaveDetails(spellInfo);
-    }
-
     if (spellId === SPELLS.DOWNPOUR_ABILITY.id) {
       this.getDownpourDetails(spellInfo);
     }
@@ -97,25 +85,6 @@ class HealingEfficiencyTracker extends CoreHealingEfficiencyTracker {
     const ability = this.abilityTracker.getAbility(SPELLS.LAVA_BURST_DAMAGE.id);
     spellInfo.damageHits = ability.damageHits || 0;
     spellInfo.damageDone = ability.damageVal.effective;
-  }
-  getHealingWaveDetails(spellInfo: SpellInfoDetails) {
-    if (this.primordialWave) {
-      spellInfo.healingDone -= this.primordialWave.waveHealing;
-      spellInfo.overhealingDone -= this.primordialWave.waveOverHealing;
-    }
-  }
-  getRiptideDetails(spellInfo: SpellInfoDetails) {
-    if (this.primordialWave) {
-      spellInfo.healingDone -= this.primordialWave.riptideHealing;
-      spellInfo.overhealingDone -= this.primordialWave.riptideOverHealing;
-    }
-  }
-  getPrimordialWaveDetails(spellInfo: SpellInfoDetails) {
-    if (this.primordialWave) {
-      spellInfo.healingDone += this.primordialWave.riptideHealing + this.primordialWave.waveHealing;
-      spellInfo.overhealingDone +=
-        this.primordialWave.riptideOverHealing + this.primordialWave.waveOverHealing;
-    }
   }
   getDownpourDetails(spellInfo: SpellInfoDetails) {
     if (this.downpour) {

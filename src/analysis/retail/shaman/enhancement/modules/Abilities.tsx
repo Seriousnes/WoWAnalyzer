@@ -59,7 +59,7 @@ class Abilities extends ClassAbilities {
         range: 40,
       },
       {
-        spell: TALENTS.STORMSTRIKE_TALENT.id,
+        spell: SPELLS.STORMSTRIKE_CAST.id,
         category: SPELL_CATEGORY.ROTATIONAL,
         cooldown: (haste) => 7.5 / (1 + haste),
         charges: 1 + (this.selectedCombatant.hasTalent(TALENTS.STORMS_WRATH_TALENT) ? 1 : 0),
@@ -123,7 +123,7 @@ class Abilities extends ClassAbilities {
         gcd: {
           base: 1500,
         },
-        enabled: combatant.hasTalent(TALENTS.PRIMORDIAL_WAVE_SPEC_TALENT),
+        enabled: combatant.hasTalent(TALENTS.PRIMORDIAL_WAVE_TALENT),
         castEfficiency: {
           suggestion: true,
           recommendedEfficiency: 1,
@@ -155,7 +155,7 @@ class Abilities extends ClassAbilities {
       },
       {
         spell: [SPELLS.STORMSTRIKE_DAMAGE.id, SPELLS.STORMSTRIKE_DAMAGE_OFFHAND.id],
-        enabled: combatant.hasTalent(TALENTS.STORMSTRIKE_TALENT),
+        enabled: true,
         category: SPELL_CATEGORY.HIDDEN,
       },
       {

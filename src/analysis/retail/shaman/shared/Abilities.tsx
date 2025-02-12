@@ -225,15 +225,6 @@ class Abilities extends CoreAbilities {
         },
       },
       {
-        spell: TALENTS.ANCESTRAL_GUIDANCE_TALENT.id,
-        enabled: combatant.hasTalent(TALENTS.ANCESTRAL_GUIDANCE_TALENT),
-        category: SPELL_CATEGORY.DEFENSIVE,
-        cooldown: 120,
-        gcd: {
-          static: 0,
-        },
-      },
-      {
         spell: TALENTS.NATURES_SWIFTNESS_TALENT.id,
         enabled: combatant.hasTalent(TALENTS.NATURES_SWIFTNESS_TALENT),
         category: SPELL_CATEGORY.COOLDOWNS,

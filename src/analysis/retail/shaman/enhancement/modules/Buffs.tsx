@@ -35,9 +35,9 @@ class Buffs extends ClassBuffs {
         timelineHighlight: true,
       },
       {
-        spellId: SPELLS.PRIMORDIAL_WAVE_BUFF.id,
-        enabled: combatant.hasTalent(TALENTS.PRIMORDIAL_WAVE_SPEC_TALENT),
-        triggeredBySpellId: TALENTS.PRIMORDIAL_WAVE_SPEC_TALENT.id,
+        spellId: SPELLS.PRIMORDIAL_STORM_USABLE.id,
+        enabled: combatant.hasTalent(TALENTS.PRIMORDIAL_STORM_TALENT),
+        triggeredBySpellId: TALENTS.PRIMORDIAL_WAVE_TALENT.id,
       },
       {
         spellId: SPELLS.LEGACY_OF_THE_FROST_WITCH_BUFF.id,
@@ -47,7 +47,7 @@ class Buffs extends ClassBuffs {
       {
         spellId: SPELLS.SPLINTERED_ELEMENTS_BUFF.id,
         enabled: combatant.hasTalent(TALENTS.SPLINTERED_ELEMENTS_TALENT),
-        triggeredBySpellId: TALENTS.PRIMORDIAL_WAVE_SPEC_TALENT.id,
+        triggeredBySpellId: TALENTS.PRIMORDIAL_WAVE_TALENT.id,
       },
       {
         spellId: SPELLS.FERAL_SPIRIT_MAELSTROM_BUFF.id,

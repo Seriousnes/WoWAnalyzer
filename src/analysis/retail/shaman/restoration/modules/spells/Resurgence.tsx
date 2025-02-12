@@ -12,14 +12,14 @@ import Statistic from 'parser/ui/Statistic';
 import { STATISTIC_ORDER } from 'parser/ui/StatisticBox';
 
 import './ManaTideTotem.scss';
-import ManaTideTotem, { MANA_REGEN_PER_SECOND } from './ManaTideTotem';
+import ManaTide, { MANA_REGEN_PER_SECOND } from './ManaTideTotem';
 import WaterShield from './WaterShield';
 import STATISTIC_CATEGORY from 'parser/ui/STATISTIC_CATEGORY';
 import TalentSpellText from 'parser/ui/TalentSpellText';
 import ItemManaGained from 'parser/ui/ItemManaGained';
 
 const SPELLS_PROCCING_RESURGENCE = {
-  [TALENTS.HEALING_WAVE_TALENT.id]: 0.008,
+  [SPELLS.HEALING_WAVE.id]: 0.008,
   [SPELLS.HEALING_SURGE.id]: 0.0048,
   [TALENTS.UNLEASH_LIFE_TALENT.id]: 0.0048,
   [TALENTS.RIPTIDE_TALENT.id]: 0.0048,
@@ -35,12 +35,12 @@ interface ResurgenceInfo {
 class Resurgence extends Analyzer {
   static dependencies = {
     manaTracker: ManaTracker,
-    manaTideTotem: ManaTideTotem,
+    manaTideTotem: ManaTide,
     waterShield: WaterShield,
   };
 
   protected manaTracker!: ManaTracker;
-  protected manaTideTotem!: ManaTideTotem;
+  protected manaTideTotem!: ManaTide;
   protected waterShield!: WaterShield;
 
   resurgence: ResurgenceInfo[] = [];
@@ -55,7 +55,7 @@ class Resurgence extends Analyzer {
         .by(SELECTED_PLAYER)
         .spell([
           SPELLS.HEALING_SURGE,
-          TALENTS.HEALING_WAVE_TALENT,
+          SPELLS.HEALING_WAVE,
           TALENTS.CHAIN_HEAL_TALENT,
           TALENTS.UNLEASH_LIFE_TALENT,
           TALENTS.RIPTIDE_TALENT,

@@ -7,20 +7,14 @@ import {
   GetRelatedEvents,
   HasRelatedEvent,
   HealEvent,
-  RefreshBuffEvent,
   RemoveBuffEvent,
 } from 'parser/core/Events';
 import { Options } from 'parser/core/Module';
 import talents from 'common/TALENTS/shaman';
 import {
-  APPLIED_HEAL,
   PRIMAL_TIDE_CORE,
   HARDCAST,
-  RIPTIDE_PWAVE,
-  HEALING_WAVE_PWAVE,
-  PWAVE_REMOVAL,
   CAST_BUFFER_MS,
-  PWAVE_TRAVEL_MS,
   HEALING_RAIN_DURATION,
   HEALING_RAIN,
   OVERFLOWING_SHORES,
@@ -60,22 +54,6 @@ const EVENT_LINKS: EventLink[] = [
     },
   },
   {
-    linkRelation: RIPTIDE_PWAVE,
-    reverseLinkRelation: APPLIED_HEAL,
-    linkingEventId: [talents.RIPTIDE_TALENT.id],
-    linkingEventType: [EventType.ApplyBuff, EventType.RefreshBuff, EventType.Heal],
-    referencedEventId: [talents.PRIMORDIAL_WAVE_RESTORATION_TALENT.id],
-    referencedEventType: [EventType.Cast],
-    forwardBufferMs: PWAVE_TRAVEL_MS,
-    backwardBufferMs: PWAVE_TRAVEL_MS,
-    additionalCondition(referencedEvent) {
-      return (referencedEvent as CastEvent).targetIsFriendly;
-    },
-    isActive(c) {
-      return c.hasTalent(talents.PRIMORDIAL_WAVE_RESTORATION_TALENT);
-    },
-  },
-  {
     linkRelation: PRIMAL_TIDE_CORE,
     linkingEventId: [talents.RIPTIDE_TALENT.id],
     linkingEventType: [EventType.ApplyBuff, EventType.Heal],
@@ -91,8 +69,7 @@ const EVENT_LINKS: EventLink[] = [
           (referencedEvent as ApplyBuffEvent).targetID &&
         (linkingEvent as ApplyBuffEvent).sourceID ===
           (referencedEvent as ApplyBuffEvent).sourceID &&
-        !HasRelatedEvent(linkingEvent, HARDCAST) &&
-        !HasRelatedEvent(linkingEvent, RIPTIDE_PWAVE)
+        !HasRelatedEvent(linkingEvent, HARDCAST)
       );
     },
     isActive(c) {
@@ -103,45 +80,13 @@ const EVENT_LINKS: EventLink[] = [
   {
     linkRelation: HARDCAST,
     reverseLinkRelation: HARDCAST,
-    linkingEventId: [talents.HEALING_WAVE_TALENT.id],
+    linkingEventId: [SPELLS.HEALING_WAVE.id],
     linkingEventType: [EventType.Heal],
-    referencedEventId: [talents.HEALING_WAVE_TALENT.id],
+    referencedEventId: [SPELLS.HEALING_WAVE.id],
     referencedEventType: [EventType.Cast],
     maximumLinks: 1,
     backwardBufferMs: CAST_BUFFER_MS,
     forwardBufferMs: CAST_BUFFER_MS,
-  },
-  {
-    linkRelation: HEALING_WAVE_PWAVE,
-    linkingEventId: [talents.HEALING_WAVE_TALENT.id],
-    linkingEventType: [EventType.Heal],
-    referencedEventId: [talents.HEALING_WAVE_TALENT.id],
-    referencedEventType: [EventType.Cast],
-    anyTarget: true,
-    backwardBufferMs: PWAVE_TRAVEL_MS,
-    forwardBufferMs: PWAVE_TRAVEL_MS,
-    additionalCondition(linkingEvent, referencedEvent) {
-      return (
-        !HasRelatedEvent(linkingEvent, HARDCAST) &&
-        (linkingEvent as HealEvent).sourceID === (referencedEvent as CastEvent).sourceID
-      );
-    },
-    isActive(c) {
-      return c.hasTalent(talents.PRIMORDIAL_WAVE_RESTORATION_TALENT);
-    },
-  },
-  {
-    linkRelation: PWAVE_REMOVAL,
-    linkingEventId: [SPELLS.PRIMORDIAL_WAVE_BUFF.id],
-    linkingEventType: [EventType.RemoveBuff],
-    referencedEventId: [talents.HEALING_WAVE_TALENT.id],
-    referencedEventType: [EventType.Cast],
-    backwardBufferMs: CAST_BUFFER_MS,
-    forwardBufferMs: CAST_BUFFER_MS,
-    anyTarget: true,
-    isActive(c) {
-      return c.hasTalent(talents.PRIMORDIAL_WAVE_RESTORATION_TALENT);
-    },
   },
   //healing rain linking
   {
@@ -285,7 +230,7 @@ const EVENT_LINKS: EventLink[] = [
     linkingEventId: [SPELLS.WHIRLING_AIR.id],
     linkingEventType: [EventType.RemoveBuff],
     referencedEventId: [
-      talents.HEALING_WAVE_TALENT.id,
+      SPELLS.HEALING_WAVE.id,
       SPELLS.HEALING_SURGE.id,
       talents.CHAIN_HEAL_TALENT.id,
       talents.WELLSPRING_TALENT.id,
@@ -319,7 +264,7 @@ const EVENT_LINKS: EventLink[] = [
     reverseLinkRelation: WHIRLINGWATER_HEAL,
     linkingEventId: [SPELLS.WHIRLING_WATER.id],
     linkingEventType: [EventType.RemoveBuff],
-    referencedEventId: [talents.HEALING_WAVE_TALENT.id, SPELLS.HEALING_SURGE.id],
+    referencedEventId: [SPELLS.HEALING_WAVE.id, SPELLS.HEALING_SURGE.id],
     referencedEventType: [EventType.Cast],
     backwardBufferMs: CAST_BUFFER_MS,
     forwardBufferMs: CAST_BUFFER_MS,
@@ -328,7 +273,7 @@ const EVENT_LINKS: EventLink[] = [
       return c.hasTalent(talents.WHIRLING_ELEMENTS_TALENT);
     },
   },
-  // Lively Totems : When you summon a Healing Tide Totem, Healing Stream Totem, Cloudburst Totem, Mana Tide Totem, or Spirit Link Totem you cast a free instant Chain Heal at 100% effectiveness.
+  // Lively Totems : When you summon a Healing Tide Totem, Healing Stream Totem, Cloudburst Totem, Mana Tide, or Spirit Link Totem you cast a free instant Chain Heal at 100% effectiveness.
   {
     linkRelation: LIVELY_TOTEMS_CHAIN_HEAL,
     reverseLinkRelation: LIVELY_TOTEMS_CHAIN_HEAL,
@@ -339,7 +284,7 @@ const EVENT_LINKS: EventLink[] = [
       talents.HEALING_STREAM_TOTEM_SHARED_TALENT.id,
       talents.HEALING_STREAM_TOTEM_RESTORATION_TALENT.id,
       talents.CLOUDBURST_TOTEM_TALENT.id,
-      talents.MANA_TIDE_TOTEM_TALENT.id,
+      talents.MANA_TIDE_TALENT.id,
       talents.SPIRIT_LINK_TOTEM_TALENT.id,
     ],
     referencedEventType: [EventType.Cast, EventType.Heal],
@@ -376,22 +321,8 @@ export function isFromHardcast(event: AbilityEvent<any>): boolean {
   return HasRelatedEvent(event, HARDCAST);
 }
 
-export function isRiptideFromPrimordialWave(
-  event: ApplyBuffEvent | RefreshBuffEvent | HealEvent,
-): boolean {
-  return HasRelatedEvent(event, RIPTIDE_PWAVE);
-}
-
-export function isHealingWaveFromPrimordialWave(event: HealEvent): boolean {
-  return HasRelatedEvent(event, HEALING_WAVE_PWAVE);
-}
-
-export function wasPrimordialWaveConsumed(event: RemoveBuffEvent): boolean {
-  return HasRelatedEvent(event, PWAVE_REMOVAL);
-}
-
 export function isFromPrimalTideCore(event: ApplyBuffEvent | HealEvent): boolean {
-  return !HasRelatedEvent(event, HARDCAST) && !HasRelatedEvent(event, RIPTIDE_PWAVE);
+  return !HasRelatedEvent(event, HARDCAST);
 }
 
 export function getHealingRainEvents(event: CastEvent) {
