@@ -235,6 +235,7 @@ class Combatant extends Entity {
       }
 
       this._gearItemsBySlotId[index] = equippedItem;
+      this.gearItemsById.set(equippedItem.id, equippedItem);
     });
   }
 
@@ -395,18 +396,10 @@ class Combatant extends Entity {
     return this._getGearItemBySlotId(GEAR_SLOTS.OFFHAND);
   }
 
-  private itemMap = new Map<number, Item>();
-  private scannedForItems = false;
+  private gearItemsById = new Map<number, Item>();
 
-  getItem(itemId: number) {
-    if (!this.scannedForItems && this.itemMap.size === 0) {
-      Object.values(this._gearItemsBySlotId).forEach((item) => {
-        this.itemMap.set(item.id, item);
-      });
-      this.scannedForItems = true;
-    }
-
-    return this.itemMap.get(itemId);
+  getItem(itemId: number): Item | undefined {
+    return this.gearItemsById.get(itemId);
   }
 
   // endregion
