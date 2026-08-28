@@ -5,6 +5,7 @@ import SpellLink from 'interface/SpellLink';
 
 // prettier-ignore
 export default [
+    change(date(2026, 8, 28), <>Count <SpellLink spell={TALENTS_SHAMAN.STORM_UNLEASHED_1_ENHANCEMENT_TALENT} /> procs towards the possible casts of <SpellLink spell={TALENTS_SHAMAN.CRASH_LIGHTNING_TALENT} />.</>, Seriousnes),
     change(date(2026, 6, 19), <>Added Midnight Season 2 tier set analysis, with <SpellLink spell={TALENTS_SHAMAN.VOLTAIC_BLAZE_TALENT} /> and <SpellLink spell={TALENTS_SHAMAN.CRASH_LIGHTNING_TALENT} /> modules.</>, Seriousnes),
     change(date(2026, 6, 11), <>Updates for <SpellLink spell={TALENTS_SHAMAN.TEMPEST_TALENT} /> and <SpellLink spell={TALENTS_SHAMAN.SURGING_TOTEM_TALENT} /> analysis.</>, Seriousnes),
     change(date(2026, 5, 25), <>Added Hero Talent guide section with <SpellLink spell={TALENTS_SHAMAN.TEMPEST_TALENT} /> and <SpellLink spell={TALENTS_SHAMAN.SURGING_TOTEM_TALENT} /> modules.</>, Seriousnes),

@@ -86,9 +86,14 @@ export interface SpellbookAbility<TrackedAbilityType extends TrackedAbility = Tr
     casts?: (castCount: TrackedAbilityType, parser: CombatLogParser) => number;
     /**
      * A function to get the max amount of casts for a spell.
+     *
+     * `castsFromCooldown` is the max cast count that would have been calculated from the
+     * spell's cooldown alone. Use it as the base when a spell also gains casts from outside
+     * its cooldown, such as a proc that allows a cast while the spell is still cooling down:
+     * `maxCasts: (cooldown, castsFromCooldown) => castsFromCooldown + procs`.
      * @deprecated Usage should be avoided. This may be removed in the future.
      */
-    maxCasts?: (cooldown: number) => number;
+    maxCasts?: (cooldown: number, castsFromCooldown: number) => number;
     /**
      * If set, this suggestion will get this static importance value. Use this
      * ISSUE_IMPORTANCE enum for this.

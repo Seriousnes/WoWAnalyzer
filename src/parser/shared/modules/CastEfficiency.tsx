@@ -31,18 +31,12 @@ export interface AbilityCastEfficiency {
   canBeImproved?: boolean;
 }
 
-class CastEfficiency extends Analyzer {
-  static dependencies = {
-    abilityTracker: AbilityTracker,
-    haste: Haste,
-    spellHistory: SpellHistory,
-    abilities: Abilities,
-  };
-  protected abilityTracker!: AbilityTracker;
-  protected haste!: Haste;
-  protected spellHistory!: SpellHistory;
-  protected abilities!: Abilities;
-
+class CastEfficiency extends Analyzer.withDependencies({
+  abilityTracker: AbilityTracker,
+  haste: Haste,
+  spellHistory: SpellHistory,
+  abilities: Abilities,
+}) {
   /**
    * Gets info about spell's cooldown behavior. All values are as of the current timestamp.
    * completedRechargeTime is the total ms of completed cooldowns
@@ -53,7 +47,7 @@ class CastEfficiency extends Analyzer {
   // oxlint-disable-next-line typescript-eslint/no-explicit-any -- Baseline suppression. Try to fix if you edit this code.
   private getCooldownInfo(ability: any) {
     const mainSpellId = ability.primarySpell;
-    const history = this.spellHistory.historyBySpellId[mainSpellId];
+    const history = this.deps.spellHistory.historyBySpellId[mainSpellId];
     if (!history) {
       // spell either never been cast, or not in abilities list
       return {
@@ -123,7 +117,7 @@ class CastEfficiency extends Analyzer {
   }
 
   private _getTimeSpentCasting(spellId: number) {
-    const history = this.spellHistory.historyBySpellId[spellId];
+    const history = this.deps.spellHistory.historyBySpellId[spellId];
     if (!history) {
       // spell either never been cast, or not in abilities list
       return 0;
@@ -163,7 +157,7 @@ class CastEfficiency extends Analyzer {
     } else if (gcd && gcd.base) {
       const base = getGcdValue(gcd.base);
       const minimum = gcd.minimum ? getGcdValue(gcd.minimum) : base / 2;
-      const gcdReduction = base * this.haste.current;
+      const gcdReduction = base * this.deps.haste.current;
       const gcdActual = Math.max(minimum, base - gcdReduction);
 
       return gcdActual;
@@ -172,14 +166,17 @@ class CastEfficiency extends Analyzer {
   }
 
   private getTimeSpentOnGcd(spellId: number) {
-    const ability = this.abilities.getAbility(spellId);
+    const ability = this.deps.abilities.getAbility(spellId);
 
     if (ability && ability.gcd) {
       const cdInfo = this.getCooldownInfo(ability);
 
       let casts;
       if (ability.castEfficiency.casts) {
-        casts = ability.castEfficiency.casts(this.abilityTracker.getAbility(spellId), this.owner);
+        casts = ability.castEfficiency.casts(
+          this.deps.abilityTracker.getAbility(spellId),
+          this.owner,
+        );
       } else {
         casts = cdInfo.casts;
       }
@@ -208,7 +205,7 @@ class CastEfficiency extends Analyzer {
    * Time spent waiting for a GCD that reset the cooldown of the spell to finish
    */
   private _getTimeWaitingOnGCD(spellId: number) {
-    const history = this.spellHistory.historyBySpellId[spellId];
+    const history = this.deps.spellHistory.historyBySpellId[spellId];
     if (!history) {
       // spell either never been cast, or not in abilities list
       return 0;
@@ -229,7 +226,7 @@ class CastEfficiency extends Analyzer {
    * Packs cast efficiency results for use by suggestions / tab
    */
   getCastEfficiency() {
-    return this.abilities.activeAbilities
+    return this.deps.abilities.activeAbilities
       .map((ability) => this.getCastEfficiencyForAbility(ability))
       .filter((item) => item !== null) as AbilityCastEfficiency[]; // getCastEfficiencyForAbility can return null, remove those from the result
   }
@@ -242,7 +239,7 @@ class CastEfficiency extends Analyzer {
     spellId: number,
     includeNoCooldownEfficiency = false,
   ): AbilityCastEfficiency | null {
-    const ability = this.abilities.getAbility(spellId);
+    const ability = this.deps.abilities.getAbility(spellId);
     return ability ? this.getCastEfficiencyForAbility(ability, includeNoCooldownEfficiency) : null;
   }
 
@@ -274,7 +271,10 @@ class CastEfficiency extends Analyzer {
     // and also for splitting up differently buffed versions of the same spell
     let casts;
     if (ability.castEfficiency.casts) {
-      casts = ability.castEfficiency.casts(this.abilityTracker.getAbility(spellId), this.owner);
+      casts = ability.castEfficiency.casts(
+        this.deps.abilityTracker.getAbility(spellId),
+        this.owner,
+      );
     } else {
       casts = cdInfo.casts;
     }
@@ -293,9 +293,20 @@ class CastEfficiency extends Analyzer {
     let rawMaxCasts: number | undefined;
     const averageCooldown =
       cdInfo.recharges === 0 ? null : cdInfo.completedRechargeTime / cdInfo.recharges;
+    // The number of casts the cooldown alone allows over the fight, as a finished cast count
+    // (the same number the computed-from-cooldown branch below arrives at, picket fence and
+    // all). Spells that also gain casts from outside their cooldown build on this in their
+    // `maxCasts` function instead of recomputing it. Falls back to the nominal cooldown when
+    // the spell was never cast, matching the branch that handles that case.
+    const timePerCast = averageCooldown
+      ? averageCooldown + averageTimeSpentCasting + averageTimeWaitingOnGCD
+      : cooldownMs;
+    const castsFromCooldown = timePerCast
+      ? Math.floor(availableFightDuration / timePerCast + (ability.charges || 1) - 1) + 1
+      : 0;
     if (ability.castEfficiency.maxCasts) {
       // maxCasts expects cooldown in seconds
-      rawMaxCasts = ability.castEfficiency.maxCasts(cooldown);
+      rawMaxCasts = ability.castEfficiency.maxCasts(cooldown, castsFromCooldown);
     } else if (averageCooldown) {
       // no average CD if spell hasn't been cast
       rawMaxCasts =
@@ -336,9 +347,15 @@ class CastEfficiency extends Analyzer {
     // prepull and once in combat, so 2") - `efficiency` below is calculated straight off
     // that raw value with no +1, so the displayed `maxCasts` must match or the UI shows an
     // inflated denominator (e.g. a hard-capped 2-max combat potion showing as "2/3").
-    const maxCasts = ability.castEfficiency.maxCasts
-      ? Math.floor(rawMaxCasts || 0)
-      : Math.floor(rawMaxCasts || 0) + 1;
+    //
+    // A spell can never have been cast more times than its maximum, so the count is floored at
+    // the number of casts that actually happened.
+    const maxCasts = Math.max(
+      casts,
+      ability.castEfficiency.maxCasts
+        ? Math.floor(rawMaxCasts || 0)
+        : Math.floor(rawMaxCasts || 0) + 1,
+    );
 
     let efficiency;
     if (ability.castEfficiency.maxCasts) {

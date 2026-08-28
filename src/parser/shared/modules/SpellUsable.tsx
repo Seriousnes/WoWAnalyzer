@@ -78,6 +78,10 @@ class SpellUsable extends Analyzer {
   protected _globalModRate = 1;
   /** Per-spell multipliers for the cooldown rate, also knowns as the 'modRate' */
   protected _spellModRates: Record<number, number> = {};
+  /** Per-spell running total of cooldown reduction that had no cooldown left to remove,
+   *  either because the spell wasn't on cooldown or because the reduction overshot the
+   *  remaining cooldown. Scaled by the spell's modRate, like the cooldowns themselves. */
+  protected _wastedCooldownReduction: Record<number, number> = {};
 
   public cooldownErrorCount = 0;
   public unknownAbilityErrorCount = 0;
@@ -206,6 +210,16 @@ class SpellUsable extends Analyzer {
   ): number {
     const cdInfo = this._currentCooldowns[this._getCanonicalId(spellId)];
     return !cdInfo ? 0 : cdInfo.expectedEnd - timestamp;
+  }
+
+  /**
+   * The total cooldown reduction applied to a spell that had no effect, because the spell
+   * was already off cooldown or the reduction was larger than the cooldown remaining.
+   * @param spellId the spell's ID
+   * @return the wasted cooldown reduction over the fight so far, in milliseconds
+   */
+  public wastedCooldownReduction(spellId: number): number {
+    return this._wastedCooldownReduction[this._getCanonicalId(spellId)] ?? 0;
   }
 
   /////////////////////////////////////////////////////////////////////////////
@@ -371,6 +385,9 @@ class SpellUsable extends Analyzer {
     const cdSpellId = this._getCanonicalId(spellId);
     const cdInfo = this._currentCooldowns[cdSpellId];
     if (!cdInfo) {
+      this._wastedCooldownReduction[cdSpellId] =
+        (this._wastedCooldownReduction[cdSpellId] ?? 0) +
+        reductionMs / this._getSpellModRate(cdSpellId);
       // Nothing to reduce, the spell isn't on cooldown
       DEBUG &&
         console.info(
@@ -401,6 +418,10 @@ class SpellUsable extends Analyzer {
     let effectiveReductionMs: number;
     if (scaledReductionMs >= totalRemainingScaledCd) {
       effectiveReductionMs = totalRemainingScaledCd * modRate;
+      // the reduction ran past the end of the cooldown, the overshoot is wasted
+      this._wastedCooldownReduction[cdSpellId] =
+        (this._wastedCooldownReduction[cdSpellId] ?? 0) +
+        (scaledReductionMs - totalRemainingScaledCd);
     } else {
       effectiveReductionMs = reductionMs;
     }
