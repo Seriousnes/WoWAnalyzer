@@ -3,6 +3,7 @@ import Analyzer from 'parser/core/Analyzer';
 import Abilities from 'parser/core/modules/Abilities';
 import Haste from 'parser/shared/modules/Haste';
 import SpellHistory from 'parser/shared/modules/SpellHistory';
+import SpellUsable from 'parser/shared/modules/SpellUsable';
 import CastEfficiencyComponent from 'parser/ui/CastEfficiency';
 import Panel from 'parser/ui/Panel';
 import Spell from 'common/SPELLS/Spell';
@@ -36,6 +37,7 @@ class CastEfficiency extends Analyzer.withDependencies({
   haste: Haste,
   spellHistory: SpellHistory,
   abilities: Abilities,
+  spellUsable: SpellUsable,
 }) {
   /**
    * Gets info about spell's cooldown behavior. All values are as of the current timestamp.
@@ -293,6 +295,11 @@ class CastEfficiency extends Analyzer.withDependencies({
     let rawMaxCasts: number | undefined;
     const averageCooldown =
       cdInfo.recharges === 0 ? null : cdInfo.completedRechargeTime / cdInfo.recharges;
+    // Cooldown reduction applied while the spell was already available did nothing to make the
+    // spell come back sooner. The player still spent the fight generating it, so it counts as
+    // time the cooldown could have been recharging in and raises the casts that were available.
+    const durationForRecharging =
+      availableFightDuration + this.deps.spellUsable.wastedCooldownReduction(spellId);
     // The number of casts the cooldown alone allows over the fight, as a finished cast count
     // (the same number the computed-from-cooldown branch below arrives at, picket fence and
     // all). Spells that also gain casts from outside their cooldown build on this in their
@@ -302,7 +309,7 @@ class CastEfficiency extends Analyzer.withDependencies({
       ? averageCooldown + averageTimeSpentCasting + averageTimeWaitingOnGCD
       : cooldownMs;
     const castsFromCooldown = timePerCast
-      ? Math.floor(availableFightDuration / timePerCast + (ability.charges || 1) - 1) + 1
+      ? Math.floor(durationForRecharging / timePerCast + (ability.charges || 1) - 1) + 1
       : 0;
     if (ability.castEfficiency.maxCasts) {
       // maxCasts expects cooldown in seconds
@@ -310,7 +317,7 @@ class CastEfficiency extends Analyzer.withDependencies({
     } else if (averageCooldown) {
       // no average CD if spell hasn't been cast
       rawMaxCasts =
-        availableFightDuration /
+        durationForRecharging /
           (averageCooldown + averageTimeSpentCasting + averageTimeWaitingOnGCD) +
         (ability.charges || 1) -
         1;
